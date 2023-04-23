@@ -1,4 +1,4 @@
-using ReCrut.Domain.Abstraction;
+using ReCrut.Domain.Abstractions;
 using ReCrut.Domain.Candidat.Aggregat;
 
 namespace ReCrut.Domain.Candidat.Events;
@@ -7,6 +7,7 @@ public record CandidatCreeEvent(
     Guid AggregateId,
     int AggregateVersion,
     DateTimeOffset EventDate,
+    string AggregateName,
     string Nom,
     string Prenom,
     string Trigramme,
@@ -15,4 +16,5 @@ public record CandidatCreeEvent(
 Event(
     AggregateId,
     AggregateVersion,
-    EventDate);
+    EventDate,
+    AggregateName);

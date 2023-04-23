@@ -1,4 +1,4 @@
-using ReCrut.Domain.Abstraction;
+using ReCrut.Domain.Abstractions;
 using ReCrut.Domain.Candidat.Aggregat;
 
 namespace ReCrut.Domain.Candidat.Commands;

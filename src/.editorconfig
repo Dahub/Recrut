@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# IDE0065: Directive using mal placée
+csharp_using_directive_placement = outside_namespace

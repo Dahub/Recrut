@@ -1,0 +1,28 @@
+FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine as build
+WORKDIR /app
+
+COPY ["/src/ReCrut.Api/*.csproj", "RecrutWebApi/"]
+COPY ["/src/ReCrut.Api/appsettings.*.json", "RecrutWebApi/"]
+RUN dotnet restore "RecrutWebApi/ReCrut.Api.csproj" 
+
+WORKDIR "/app/RecrutWebApi"
+COPY . .
+
+RUN dotnet publish ReCrut.Api.csproj -c Release -o /app/published-app
+
+FROM mcr.microsoft.com/dotnet/aspnet:6.0-alpine as runtime
+
+# https://andrewlock.net/dotnet-core-docker-and-cultures-solving-culture-issues-porting-a-net-core-app-from-windows-to-linux/
+
+# usefull for globalization, cannot apply ef migrations without it
+RUN apk add --no-cache icu-libs
+# add bash to launch wait-for-it script
+RUN apk add --no-cache bash 
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
+
+WORKDIR /app
+COPY --from=build /app/published-app /app
+COPY [ "/docker/resources/wait-for-it.sh", "/app/wait-for-it.sh"]
+RUN chmod +x /app/wait-for-it.sh
+
+ENTRYPOINT [ "dotnet", "/app/ReCrut.Api.dll" ]

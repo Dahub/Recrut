@@ -1,0 +1,83 @@
+version: "3.9" 
+services:
+
+  reverse-proxy:
+    image: nginx
+    container_name: recrutnginxreverseproxy    
+    depends_on:
+      - logging-seq
+      - recrut-webapi
+    volumes:
+      - ./docker/resources/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - 80:80
+    networks:
+      - recrutnetwork-frontend
+      - recrutnetwork-backend
+
+  recrut-logging-seqcli:
+    build: 
+      context: .
+      dockerfile: docker/SeqCliDockerFile
+    container_name: recrutseqcli
+    depends_on:
+      - recrutseqlog
+    networks:
+      - recrutnetwork-backend
+
+  recrut-logging-seq:
+    image: datalust/seq
+    container_name: recrutseqlog
+    volumes:
+      - ./docker/volumes/seq:/data
+    environment:
+      - ACCEPT_EULA=Y
+    networks:
+      - recrutnetwork-backend
+
+  recrut-webapi:
+    build:
+      context: .
+      dockerfile: docker/RecrutWebApiDockerfile
+    image: recrutwebapi
+    container_name: recrutwebapi
+    depends_on:
+      - recrut-mssql
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Local
+    entrypoint: ["/app/wait-for-it.sh", "recrutmssql:1433", "-t", "120", "--", "dotnet", "/app/ReCrut.Api.dll"] # https://stackoverflow.com/questions/60539114/how-to-wait-for-mssql-in-docker-compose
+    networks:
+      - recrutnetwork-frontend
+      - recrutnetwork-backend
+
+  # recrut-ui:
+  #   build:
+  #     context: .  
+  #     dockerfile: docker/OpenIdUiDockerfile
+  #   image: recrutui
+  #   container_name: recrutui
+  #   depends_on:
+  #     - recrut-webapi
+  #   networks:
+  #     - recrutnetwork-frontend
+
+  recrut-mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: recrutmssql
+    ports:
+      - 1433:1433
+    volumes:
+      - ./docker/volumes/recrutmssql/data:/var/opt/mssql/data
+      - ./docker/volumes/recrutmssql/log:/var/opt/mssql/log
+      - ./docker/volumes/recrutmssql/secrets:/var/opt/mssql/secrets
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=aNiceLocalPassword#66
+    networks:
+      - recrutnetwork-backend
+
+networks:
+  recrutnetwork-backend:
+    driver: bridge
+  recrutnetwork-frontend:
+    driver: bridge

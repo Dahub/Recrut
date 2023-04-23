@@ -1,4 +1,6 @@
-namespace ReCrut.Domain.Test;
+namespace ReCrut.Test.Commun;
+
+using ReCrut.Domain.Abstractions;
 
 public class FakeDateTimeProvider : IDateTimeProvider
 {

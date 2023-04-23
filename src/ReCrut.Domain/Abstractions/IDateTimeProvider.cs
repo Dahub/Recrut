@@ -1,4 +1,4 @@
-namespace ReCrut.Domain.Abstraction;
+namespace ReCrut.Domain.Abstractions;
 
 public interface IDateTimeProvider
 {
