@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Folder Include="SqlServer\EventDatabase\Migrations\" />
+    <Folder Include="SqlServer\ProjectionDatabase\Migrations\" />
   </ItemGroup>
 
   <ItemGroup>

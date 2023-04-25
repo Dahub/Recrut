@@ -6,5 +6,5 @@ Event DB :
 	dotnet ef database update --context EventDbContext
 
 ViewProjection DB :
-	dotnet ef migrations add <name> --context ViewProjectionDbContext -o SqlServer\ViewProjectionDatabase\Migrations\
-	dotnet ef database update --context ViewProjectionDbContext
+	dotnet ef migrations add <name> --context ProjectionDbContext -o SqlServer\ProjectionDatabase\Migrations\
+	dotnet ef database update --context ProjectionDbContext

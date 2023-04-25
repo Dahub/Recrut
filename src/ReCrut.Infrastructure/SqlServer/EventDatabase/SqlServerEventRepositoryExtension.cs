@@ -1,4 +1,5 @@
 ﻿using ReCrut.Domain.Abstractions;
+using ReCrut.Infrastructure.SqlServer.EventDatabase.EfEntities;
 using System.Reflection;
 
 namespace ReCrut.Infrastructure.SqlServer.EventDatabase;

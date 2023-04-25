@@ -16,7 +16,7 @@ public record CandidatProjection : Projection
 
     public string CandidatStatus { get; init; } = String.Empty;
 
-    public CandidatProjection With(Event @event) =>
+    public override CandidatProjection With(Event @event) =>
         @event switch
         {
             CandidatCreeEvent candidatCree => this with {

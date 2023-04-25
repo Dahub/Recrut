@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
+using ReCrut.Infrastructure.SqlServer.EventDatabase.EfEntities;
 
 namespace ReCrut.Infrastructure.SqlServer.EventDatabase;
 
@@ -8,6 +9,8 @@ public class EventDbContext : DbContext
 #pragma warning disable CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
     public EventDbContext([NotNull] DbContextOptions<EventDbContext> options) : base(options) { }
 #pragma warning restore CS8618 // Un champ non-nullable doit contenir une valeur non-null lors de la fermeture du constructeur. Envisagez de déclarer le champ comme nullable.
+   
+    internal DbSet<EventEfEntity> Events { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -60,6 +63,4 @@ public class EventDbContext : DbContext
         modelBuilder.Entity<EventEfEntity>()
             .HasIndex(e => e.AggregateId);
     }
-
-    internal DbSet<EventEfEntity> Events { get; set; }
 }

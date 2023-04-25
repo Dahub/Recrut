@@ -4,7 +4,7 @@ namespace ReCrut.Application.Abstractions;
 
 public interface IProjectionRepository
 {
-    Projection GetById(Guid id);
+    Projection? GetById<TProjection>(Guid id) where TProjection : Projection;
     
     void Upsert(Projection projection);
 }

@@ -1,4 +1,4 @@
-﻿namespace ReCrut.Infrastructure.SqlServer;
+﻿namespace ReCrut.Infrastructure.SqlServer.EventDatabase.EfEntities;
 
 internal class EventEfEntity
 {
