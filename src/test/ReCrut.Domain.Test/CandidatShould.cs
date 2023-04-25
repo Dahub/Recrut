@@ -1,6 +1,7 @@
 namespace ReCrut.Domain.Test;
 
 using ReCrut.Domain.Abstractions;
+using ReCrut.Domain.Exceptions;
 
 public class CandidatShould
 {
@@ -32,11 +33,11 @@ public class CandidatShould
         var candidatState = CandidatState.From(events);
 
         // When
-        (Event @event, State<CandidatState> state) eventAndState = candidatState.Creer(creerCandidatCommand, dateTimeProvider);    
-    
+        (Event @event, State<CandidatState> state) = candidatState.Creer(creerCandidatCommand, dateTimeProvider);
+
         // Then
-        eventAndState.@event.Should().NotBeNull();
-        eventAndState.state.Should().NotBeNull();
+        @event.Should().NotBeNull();
+        state.Should().NotBeNull();
 
         var expectedEvent = new CandidatCreeEvent(
             aggregateId,
@@ -49,7 +50,7 @@ public class CandidatShould
             datePriseContact,
             candidatStatus);
 
-        eventAndState.@event.Should().Be(expectedEvent);
+        @event.Should().Be(expectedEvent);
 
         var expectedState = new CandidatState()
         {
@@ -62,6 +63,39 @@ public class CandidatShould
             Trigramme = trigramme
         };
 
-        eventAndState.state.Should().Be(expectedState);
+        state.Should().Be(expectedState);
+    }
+
+    [Fact]
+    public void ThrowBusinessExceptionWhenCreatedWithCandidatStatusSupprime()
+    {
+        // Given
+        var aggregateId = Guid.NewGuid();
+        var nom = Guid.NewGuid().ToString();
+        var prenom = Guid.NewGuid().ToString();
+        var trigramme = Guid.NewGuid().ToString();
+        var candidatStatus = CandidatStatus.Supprime;
+        var datePriseContact = DateOnly.FromDateTime(DateTime.Now);
+        var now = DateTimeOffset.Now;
+        var dateTimeProvider = new FakeDateTimeProvider(now);
+
+        var creerCandidatCommand = new CreerCandidatCommand(
+            aggregateId,
+            nom,
+            prenom,
+            trigramme,
+            datePriseContact,
+            candidatStatus
+        );
+
+        var events = Enumerable.Empty<Event>();
+
+        var candidatState = CandidatState.From(events);
+
+        // When
+        var act = () => candidatState.Creer(creerCandidatCommand, dateTimeProvider);
+
+        //Then
+        act.Should().Throw<BusinessException>();
     }
 }

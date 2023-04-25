@@ -1,20 +1,15 @@
-namespace ReCrut.Api;
+using ReCrut.Api.Configuration;
 
-public class Program
-{
-    public static void Main()
-    {
-        var builder = WebApplication.CreateBuilder();
-        builder.ConfigureServices();
+var builder = WebApplication.CreateBuilder();
 
-        var app = builder.Build();
+builder.ConfigureServices();
 
-        app.MigrateDatabases();
-        app.ConfigureWeb();
-        app.ConfigureEndpoints();
+var app = builder.Build();
 
-        app.Logger.LogInformation("Start Application - Environnement : {environnement}", builder.Environment.EnvironmentName);
+app.MigrateDatabases();
+app.ConfigureWeb();
+app.ConfigureEndpoints();
+
+app.Logger.LogInformation("Start Application - Environnement : {environnement}", builder.Environment.EnvironmentName);
         
-        app.Run();
-    }
-}
+app.Run();

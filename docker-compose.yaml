@@ -40,6 +40,7 @@ services:
       context: .
       dockerfile: docker/RecrutWebApiDockerfile
     image: recrutwebapi
+    restart: always
     container_name: recrutwebapi
     depends_on:
       - recrut-mssql

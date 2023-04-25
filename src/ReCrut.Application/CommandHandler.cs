@@ -3,6 +3,7 @@ using ReCrut.Application.Abstractions;
 using ReCrut.Domain.Abstractions;
 using ReCrut.Domain.Candidat.Aggregat;
 using ReCrut.Domain.Candidat.Commands;
+using ReCrut.Domain.Exceptions;
 
 namespace ReCrut.Application;
 
@@ -45,6 +46,12 @@ public class CommandHandler
             func(state).Save(_eventRepository).Publish(_eventPublisher);
 
             return HandleResult.Ok();
+        }
+        catch (BusinessException ex)
+        {
+            _logger.LogError(ex.Message);
+
+            return HandleResult.Error(ex.Message);
         }
         catch (Exception ex)
         {

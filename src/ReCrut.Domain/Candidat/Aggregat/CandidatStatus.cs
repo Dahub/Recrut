@@ -6,5 +6,6 @@ public enum CandidatStatus
     CandidatAContacter,
     EntretienAPlanifier,
     ReponseOkADonner,
-    ReponsekoADonner
+    ReponsekoADonner,
+    Supprime
 }

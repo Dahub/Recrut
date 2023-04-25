@@ -19,7 +19,7 @@ public static class ApiConfiguration
         {
             endpoints.MapGet("/", async context => await context.Response.WriteAsync("Hello world !"));
 
-            endpoints.MapPost("/candidat", (CreerCandidatCommand command, CommandHandler handler) => handler.Handle(command));
+            endpoints.MapPost("/candidat", (CreerCandidatCommand command, CommandHandler handler) => handler.Handle(command).ToHttpResponse());
         });
 
         return app;
