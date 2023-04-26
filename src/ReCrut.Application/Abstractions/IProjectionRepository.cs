@@ -2,9 +2,11 @@
 
 namespace ReCrut.Application.Abstractions;
 
-public interface IProjectionRepository
+public interface IProjectionRepository<TProjection> where TProjection : Projection
 {
-    Projection? GetById<TProjection>(Guid id) where TProjection : Projection;
+    TProjection? GetById(Guid id);
     
-    void Upsert(Projection projection);
+    void Upsert(TProjection projection);
+
+    IEnumerable<TProjection> Get(Func<TProjection, bool> predicat);
 }

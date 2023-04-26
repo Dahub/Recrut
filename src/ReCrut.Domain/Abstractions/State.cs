@@ -5,8 +5,6 @@ public abstract record State<TState>(
 {
     public abstract TState With(Event @event);
 
-    public static TState New => new();
-
     public static TState From(IEnumerable<Event> events) =>
         events.Aggregate(
             seed: Activator.CreateInstance<TState>(),

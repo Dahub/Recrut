@@ -1,5 +1,6 @@
 ﻿using ReCrut.Application;
 using ReCrut.Domain.Candidat.Commands;
+using ReCrut.Domain.Candidat.Queries;
 
 namespace ReCrut.Api.Configuration;
 
@@ -20,6 +21,7 @@ public static class ApiConfiguration
             endpoints.MapGet("/", async context => await context.Response.WriteAsync("Hello world !"));
 
             endpoints.MapPost("/candidat", (CreerCandidatCommand command, CommandHandler handler) => handler.Handle(command).ToHttpResponse());
+            endpoints.MapGet("/candidat", (QueryHandler handler) => handler.Handle(new GetAllCandidatsQuery()));
         });
 
         return app;
